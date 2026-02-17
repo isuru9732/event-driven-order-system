@@ -1,4 +1,4 @@
-package com.order_process.ops;
+package com.order_process;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
