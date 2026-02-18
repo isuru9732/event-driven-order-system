@@ -1,7 +1,6 @@
 package com.order_process.event;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
