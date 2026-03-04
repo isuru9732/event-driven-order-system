@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.order_process.entity.ProcessedEvent;
 import com.order_process.event.OrderCreatedEvent;
+import com.order_process.event.PaymentCompletedEvent;
+import com.order_process.event.publish.PaymentEventPublisher;
 import com.order_process.repository.ProcessedEventRepository;
 
 import jakarta.transaction.Transactional;
@@ -18,16 +20,26 @@ public class PaymentService {
 	@Autowired
 	ProcessedEventRepository processedEventRepository;
 
+	@Autowired
+	PaymentEventPublisher paymentEventPublisher;
+
 	@Transactional
 	public void processPayment(OrderCreatedEvent event) {
-
+		System.out.print("Processing payment for event.getEventId(): " + event.getEventId());
 		if (processedEventRepository.existsById(UUID.fromString(event.getEventId()))) {
+			System.out.print("Event already processed, skipping");
 			return; // already processed
 		}
 
 		// simulate payment
 		// charge customer
-		
+
 		processedEventRepository.save(new ProcessedEvent(UUID.fromString(event.getEventId()), Instant.now()));
+
+		PaymentCompletedEvent paymentEvent = PaymentCompletedEvent.builder().eventId(UUID.randomUUID().toString())
+				.amount(event.getAmount()).userId(event.getUserId()).build();
+
+		paymentEventPublisher.publish(paymentEvent);
+
 	}
 }

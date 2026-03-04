@@ -1,4 +1,4 @@
-package com.order_process.consumer;
+package com.order_process.event.consumer;
 
 import java.io.IOException;
 
@@ -22,11 +22,14 @@ public class PaymentListener {
 	public void handleOrderCreated(OrderCreatedEvent event, Channel channel, Message message) throws IOException {
 
 		try {
+			System.out.println("Event recieved");
 			paymentService.processPayment(event);
 
 			channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
 
 		} catch (Exception ex) {
+			System.out.println("Consumer crashed: " + ex.getMessage());
+
 			channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
 		}
 	}

@@ -2,4 +2,9 @@ spring:
   rabbitmq:
     listener:
       simple:
-        acknowledge-mode: manual
+        acknowledge-mode: manual  
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin123
+    

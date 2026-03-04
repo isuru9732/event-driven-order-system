@@ -20,6 +20,8 @@ public class OrderService {
 	public ResponseEntity<?> PlaceOrder(CreateOrderRequest request) {
 		
 		String orderId = UUID.randomUUID().toString();
+		
+		// do the order create part
 
 	    OrderCreatedEvent event = OrderCreatedEvent.builder()
 	            .eventId(UUID.randomUUID().toString())
