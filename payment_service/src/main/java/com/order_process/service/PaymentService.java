@@ -32,11 +32,13 @@ public class PaymentService {
 		}
 
 		// simulate payment
+		// payment issue check and if payment.fail send to event order-service
 		// charge customer
 
 		processedEventRepository.save(new ProcessedEvent(UUID.fromString(event.getEventId()), Instant.now()));
 
 		PaymentCompletedEvent paymentEvent = PaymentCompletedEvent.builder().eventId(UUID.randomUUID().toString())
+				.orderId(event.getOrderId())
 				.amount(event.getAmount()).userId(event.getUserId()).build();
 
 		paymentEventPublisher.publish(paymentEvent);
