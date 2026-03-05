@@ -4,20 +4,21 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import com.order_process.config.RabbitConfig;
+import com.order_process.event.InventoryUpdatedEvent;
 import com.order_process.event.PaymentCompletedEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentEventPublisher {
+public class InventoryEventPublisher {
 
 	private final RabbitTemplate rabbitTemplate;
 	
-	public void publish(PaymentCompletedEvent event) {
+	public void publish(InventoryUpdatedEvent event) {
         rabbitTemplate.convertAndSend(
-                RabbitConfig.PAYMENT_EXCHANGE,
-                RabbitConfig.PAYMENT_COMPLETED,
+                RabbitConfig.INVENTORY_EXCHANGE,
+                RabbitConfig.INVENTORY_UPDATED,
                 event
         );
     } 

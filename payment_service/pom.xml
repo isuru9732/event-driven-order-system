@@ -12,7 +12,7 @@
 	<groupId>com.order_process</groupId>
 	<artifactId>payment_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>order_service</name>
+	<name>payment_service</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
 	<licenses>

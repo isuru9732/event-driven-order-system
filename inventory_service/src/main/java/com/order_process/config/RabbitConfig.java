@@ -12,40 +12,40 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-
-	public static final String ORDER_EXCHANGE = "order.exchange";
-	public static final String ORDER_CREATED = "order.created";
-	public static final String PAYMENT_QUEUE = "payment.queue";
-	public static final String PAYMENT_DLQ = "payment.dlq";
+	
 	public static final String PAYMENT_EXCHANGE = "payment.exchange";
+	public static final String INVENTORY_EXCHANGE = "inventory.exchange";
 	public static final String PAYMENT_COMPLETED = "payment.completed";
+	public static final String INVENTORY_QUEUE = "inventory.queue";
+	public static final String INVENTORY_DLQ = "inventory.dlq";
+	public static final String INVENTORY_UPDATED = "inventory.updated";
 
-    @Bean
-    TopicExchange orderExchange() {
-		return new TopicExchange(ORDER_EXCHANGE);
-	}
-    
+
     @Bean
     TopicExchange paymentExchange() {
 		return new TopicExchange(PAYMENT_EXCHANGE);
 	}
+    @Bean
+    TopicExchange invoiceExchange() {
+		return new TopicExchange(INVENTORY_EXCHANGE);
+	}
 
 	@Bean
-	Queue paymentQueue() {
-		return QueueBuilder.durable(PAYMENT_QUEUE)
+	Queue inventoryQueue() {
+		return QueueBuilder.durable(INVENTORY_QUEUE)
 				.withArgument("x-dead-letter-exchange", "")
-				.withArgument("x-dead-letter-routing-key", PAYMENT_DLQ)
+				.withArgument("x-dead-letter-routing-key", INVENTORY_DLQ)
 				.build();
 	}
 
 	@Bean
-	Queue paymentDeadLetterQueue() {
-		return QueueBuilder.durable(PAYMENT_DLQ).build();
+	Queue inventoryDeadLetterQueue() {
+		return QueueBuilder.durable(INVENTORY_DLQ).build();
 	}
 
 	@Bean
-	Binding paymentBinding(Queue paymentQueue, TopicExchange orderExchange) {
-		return BindingBuilder.bind(paymentQueue).to(orderExchange).with(ORDER_CREATED);
+	Binding inventoryBinding(Queue inventoryQueue, TopicExchange paymentExchange) {
+		return BindingBuilder.bind(inventoryQueue).to(paymentExchange).with(PAYMENT_COMPLETED);
 	}
 	
 	@Bean
